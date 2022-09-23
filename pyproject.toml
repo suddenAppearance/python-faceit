@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "python-faceit"
+version = "0.1.0"
+description = "Python wrapper for Faceit API"
+authors = ["sudden_appearance <kuz.damir.01@gmail.com>"]
+readme = "README.md"
+packages = [{include = "python_faceit"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+urllib3 = "^1.26.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
