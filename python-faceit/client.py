@@ -1,9 +1,11 @@
 import json
-from typing import Callable, Any, TypeVar
+from typing import TypeVar, Literal
+from urllib.parse import urlencode
 
 import urllib3
+from urllib3.util import Url
 
-from types_ import GamesList
+from types_ import GamesList, GameDetail, ChampionshipsList
 
 T = TypeVar('T')
 
@@ -26,8 +28,23 @@ class SyncClient:
 
 
 class DataWrapper(SyncClient):
-    message = "Hello"
+    def get_championships(self, game: int, type: Literal['all', 'upcoming', 'ongoing', 'past']) -> ChampionshipsList:
+        pass
 
-    def games(self, offset: int | None, limit: int | None) -> GamesList:
-        r = self.http.request("GET", f"https://open.faceit.com/data/v4/games?offset={offset}&limit={limit}")
+    def get_games(self, offset: int | None = None, limit: int | None = None) -> GamesList:
+        params = {k: v for k, v in (("offset", offset), ("limit", limit)) if v is not None}
+        r = self.http.request("GET", f"https://open.faceit.com/data/v4/games?{urlencode(params)}")
         return json.loads(r.data)
+
+    def get_game_by_id(self, game_id: int) -> GameDetail:
+        r = self.http.request("GET", f"https://open.faceit.com/data/v4/games/{game_id}")
+        return json.loads(r.data)
+
+    def get_game_parent_by_game_id(self, game_id: int) -> GameDetail:
+        r = self.http.request("GET", f"https://open.faceit.com/data/v4/games/{game_id}/parent")
+        return json.loads(r.data)
+
+
+print(Url(scheme='https',
+          host='open.faceit.com',
+          path='Generate+value'))
